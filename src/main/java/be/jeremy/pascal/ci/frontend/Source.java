@@ -3,19 +3,26 @@
  */
 package be.jeremy.pascal.ci.frontend;
 
+import be.jeremy.pascal.ci.message.Message;
+import be.jeremy.pascal.ci.message.MessageHandler;
+import be.jeremy.pascal.ci.message.MessageListener;
+import be.jeremy.pascal.ci.message.MessageProducer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
  * @author Jeremy Vanpe (eh056)
  */
-public class Source {
+public class Source implements MessageProducer {
 
     public static final char EOL = '\n';
 
     public static final char EOF = 0;
 
-    private BufferedReader reader;
+    private final BufferedReader reader;
+
+    private final MessageHandler messageHandler = new MessageHandler();
 
     private String line;
 
@@ -23,7 +30,7 @@ public class Source {
 
     private int currentPos;
 
-    public Source(BufferedReader reader) throws IOException {
+    public Source(BufferedReader reader) {
         this.lineNum = 0;
         this.currentPos = -2;
         this.reader = reader;
@@ -72,6 +79,7 @@ public class Source {
         currentPos = -1;
         if (line != null) {
             ++lineNum;
+            sendMessage(new Message(SOURCE_LINE, new Object[] {lineNum, line}));
         }
     }
 
@@ -84,6 +92,21 @@ public class Source {
                 throw ex;
             }
         }
+    }
+
+    @Override
+    public void addMessageListener(MessageListener listener) {
+        messageHandler.addListener(listener);
+    }
+
+    @Override
+    public void removeMessageListener(MessageListener listener) {
+        messageHandler.removeListener(listener);
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+        messageHandler.sendMessage(message);
     }
 }
 
