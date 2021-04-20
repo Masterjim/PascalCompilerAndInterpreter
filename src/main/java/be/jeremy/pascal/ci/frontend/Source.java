@@ -11,6 +11,8 @@ import be.jeremy.pascal.ci.message.MessageProducer;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import static be.jeremy.pascal.ci.message.MessageType.SOURCE_LINE;
+
 /**
  * @author Jeremy Vanpe (eh056)
  */
