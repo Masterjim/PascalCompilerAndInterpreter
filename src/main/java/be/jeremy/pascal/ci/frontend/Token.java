@@ -28,6 +28,10 @@ public class Token {
         extract();
     }
 
+    public int getLineNumber() {
+        return lineNum;
+    }
+
     protected void extract() throws Exception {
         text = Character.toString(currentChar());
         value = null;
